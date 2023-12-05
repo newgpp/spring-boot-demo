@@ -1,0 +1,10 @@
+server:
+  port: 8300
+
+logging:
+  level:
+    root: info
+    com.felix: debug
+  customize:
+    appender: console
+

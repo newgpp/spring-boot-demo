@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.MicroConfigMapper">
+  <resultMap id="BaseResultMap" type="model.MicroConfig">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="key1" jdbcType="VARCHAR" property="key1" />
+    <result column="value1" jdbcType="VARCHAR" property="value1" />
+    <result column="application" jdbcType="VARCHAR" property="application" />
+    <result column="profile" jdbcType="VARCHAR" property="profile" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="configType" jdbcType="VARCHAR" property="configtype" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, key1, value1, application, profile, label, configType, description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from micro_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from micro_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="model.MicroConfig" useGeneratedKeys="true">
+    insert into micro_config (key1, value1, application, 
+      profile, label, configType, 
+      description)
+    values (#{key1,jdbcType=VARCHAR}, #{value1,jdbcType=VARCHAR}, #{application,jdbcType=VARCHAR}, 
+      #{profile,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, #{configtype,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="model.MicroConfig" useGeneratedKeys="true">
+    insert into micro_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="key1 != null">
+        key1,
+      </if>
+      <if test="value1 != null">
+        value1,
+      </if>
+      <if test="application != null">
+        application,
+      </if>
+      <if test="profile != null">
+        profile,
+      </if>
+      <if test="label != null">
+        label,
+      </if>
+      <if test="configtype != null">
+        configType,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="key1 != null">
+        #{key1,jdbcType=VARCHAR},
+      </if>
+      <if test="value1 != null">
+        #{value1,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="configtype != null">
+        #{configtype,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.MicroConfig">
+    update micro_config
+    <set>
+      <if test="key1 != null">
+        key1 = #{key1,jdbcType=VARCHAR},
+      </if>
+      <if test="value1 != null">
+        value1 = #{value1,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        application = #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        profile = #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null">
+        label = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="configtype != null">
+        configType = #{configtype,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.MicroConfig">
+    update micro_config
+    set key1 = #{key1,jdbcType=VARCHAR},
+      value1 = #{value1,jdbcType=VARCHAR},
+      application = #{application,jdbcType=VARCHAR},
+      profile = #{profile,jdbcType=VARCHAR},
+      label = #{label,jdbcType=VARCHAR},
+      configType = #{configtype,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <resultMap id="BaseResultMap" type="model.MicroConfig">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="key1" jdbcType="VARCHAR" property="key1" />
+    <result column="value1" jdbcType="VARCHAR" property="value1" />
+    <result column="application" jdbcType="VARCHAR" property="application" />
+    <result column="profile" jdbcType="VARCHAR" property="profile" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="configType" jdbcType="VARCHAR" property="configtype" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, key1, value1, application, profile, label, configType, description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from micro_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from micro_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="model.MicroConfig" useGeneratedKeys="true">
+    insert into micro_config (key1, value1, application, 
+      profile, label, configType, 
+      description)
+    values (#{key1,jdbcType=VARCHAR}, #{value1,jdbcType=VARCHAR}, #{application,jdbcType=VARCHAR}, 
+      #{profile,jdbcType=VARCHAR}, #{label,jdbcType=VARCHAR}, #{configtype,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="model.MicroConfig" useGeneratedKeys="true">
+    insert into micro_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="key1 != null">
+        key1,
+      </if>
+      <if test="value1 != null">
+        value1,
+      </if>
+      <if test="application != null">
+        application,
+      </if>
+      <if test="profile != null">
+        profile,
+      </if>
+      <if test="label != null">
+        label,
+      </if>
+      <if test="configtype != null">
+        configType,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="key1 != null">
+        #{key1,jdbcType=VARCHAR},
+      </if>
+      <if test="value1 != null">
+        #{value1,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null">
+        #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="configtype != null">
+        #{configtype,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="model.MicroConfig">
+    update micro_config
+    <set>
+      <if test="key1 != null">
+        key1 = #{key1,jdbcType=VARCHAR},
+      </if>
+      <if test="value1 != null">
+        value1 = #{value1,jdbcType=VARCHAR},
+      </if>
+      <if test="application != null">
+        application = #{application,jdbcType=VARCHAR},
+      </if>
+      <if test="profile != null">
+        profile = #{profile,jdbcType=VARCHAR},
+      </if>
+      <if test="label != null">
+        label = #{label,jdbcType=VARCHAR},
+      </if>
+      <if test="configtype != null">
+        configType = #{configtype,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="model.MicroConfig">
+    update micro_config
+    set key1 = #{key1,jdbcType=VARCHAR},
+      value1 = #{value1,jdbcType=VARCHAR},
+      application = #{application,jdbcType=VARCHAR},
+      profile = #{profile,jdbcType=VARCHAR},
+      label = #{label,jdbcType=VARCHAR},
+      configType = #{configtype,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
