@@ -1,0 +1,13 @@
+server:
+  port: 8502
+
+logging:
+  level:
+    root: info
+    com.felix: debug
+  customize:
+    appender: console
+
+spring:
+  application:
+    name: boot-web
