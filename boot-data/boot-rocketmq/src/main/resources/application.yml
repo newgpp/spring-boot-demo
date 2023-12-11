@@ -1,0 +1,30 @@
+server:
+  port: 8503
+
+logging:
+  level:
+    root: info
+    com.felix: debug
+  customize:
+    appender: console
+
+spring:
+  application:
+    name: micro-redis
+
+com:
+  felix:
+    mq:
+      brokers:
+      accessKey: xxx
+      secretKey: xxx
+      producers:
+        - name: orderPlaceProducer
+          group: group_order_01
+          topic: topic_order
+          tag: place
+      consumers:
+        - name: orderPlaceConsumer
+          group: group_order_01
+          topic: topic_order
+          tag: place
