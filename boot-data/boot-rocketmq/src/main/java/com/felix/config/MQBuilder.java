@@ -7,7 +7,6 @@ import java.util.Objects;
 
 /**
  * @author felix
- * @desc some desc
  */
 
 @ConfigurationProperties("com.felix.mq")

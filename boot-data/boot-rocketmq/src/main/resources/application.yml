@@ -15,16 +15,16 @@ spring:
 com:
   felix:
     mq:
-      brokers:
-      accessKey: xxx
-      secretKey: xxx
+      brokers: 192.168.159.111:9876
+      ak:
+      sk:
       producers:
         - name: orderPlaceProducer
           group: group_order_01
           topic: topic_order
           tag: place
       consumers:
-        - name: orderPlaceConsumer
+        - name: orderConsumer
           group: group_order_01
           topic: topic_order
-          tag: place
+          tag: place,pay
