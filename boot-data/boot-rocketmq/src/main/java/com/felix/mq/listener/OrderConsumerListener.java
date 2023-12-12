@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author felix
- * @desc some desc
  */
 public class OrderConsumerListener implements MqConsumer.ConsumerListener {
 
