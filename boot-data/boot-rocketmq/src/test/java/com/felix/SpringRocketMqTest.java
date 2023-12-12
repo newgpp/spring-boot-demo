@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.felix.mq.producer.MqProducer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -19,6 +21,8 @@ import java.util.concurrent.CountDownLatch;
 @SpringBootTest
 public class SpringRocketMqTest {
 
+    private static final Logger log = LoggerFactory.getLogger(SpringRocketMqTest.class);
+
     @Autowired
     private MqProducer orderPlaceProducer;
     @Autowired
@@ -32,7 +36,7 @@ public class SpringRocketMqTest {
         o1.put("ts", System.currentTimeMillis());
         try {
             boolean place = orderPlaceProducer.send("place", null, o1.toString());
-            System.out.println(place);
+            log.info("send message sync result={}", place);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,13 +57,16 @@ public class SpringRocketMqTest {
         try {
             orderPlaceProducer.sendAsync("pay", null, o2.toString(), new MqProducer.Callback() {
                 @Override
-                public void onStatus(boolean succeed) {
-                    System.out.println("status: " + succeed);
+                public void onSuccess() {
+                    log.info("send message async success");
                 }
 
                 @Override
-                public void onException(Throwable e) {
-                    e.printStackTrace();
+                public void onFail(Throwable e, String topic, String tag, String key, String body) {
+                    log.error("send message fail topic={}, tag={}, key={}, body={}", topic, tag, key, body);
+                    if (e != null) {
+                        log.error("send message error: ", e);
+                    }
                 }
             });
         } catch (Exception e) {
@@ -75,10 +82,7 @@ public class SpringRocketMqTest {
 
     @Test
     public void consume_message_should_success() {
-
         System.out.println("------------------");
         System.out.println("111111111111111111");
-
-
     }
 }

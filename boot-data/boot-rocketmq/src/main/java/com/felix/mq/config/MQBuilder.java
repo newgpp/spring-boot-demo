@@ -11,6 +11,8 @@ import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.List;
@@ -23,6 +25,8 @@ import java.util.UUID;
 
 @ConfigurationProperties("com.felix.mq")
 public class MQBuilder {
+
+    private static final Logger log = LoggerFactory.getLogger(MQBuilder.class);
 
     private String brokers;
 
@@ -115,17 +119,18 @@ public class MQBuilder {
     }
 
     private ProducerConsumerBuilder getProducerBuilder(String name) {
-        return producers.stream().filter(x -> Objects.equals(name, x.getName()))
-                .findFirst().orElse(null);
+        return producers.stream().filter(x -> Objects.equals(name, x.getName())).findFirst().orElse(null);
     }
 
     private ProducerConsumerBuilder getConsumerBuilder(String name) {
-        return consumers.stream().filter(x -> Objects.equals(name, x.getName()))
-                .findFirst().orElse(null);
+        return consumers.stream().filter(x -> Objects.equals(name, x.getName())).findFirst().orElse(null);
     }
 
     public MqProducer buildProducer(String name) {
         MQBuilder.ProducerConsumerBuilder producerBuilder = getProducerBuilder(name);
+        if (producerBuilder == null) {
+            throw new RuntimeException("缺少MQ生产者配置, name=" + name);
+        }
         DefaultMQProducer producer;
         if (StringUtils.isNoneEmpty(ak) && StringUtils.isNoneEmpty(sk)) {
             AclClientRPCHook aclClientRPCHook = new AclClientRPCHook(new SessionCredentials(ak, sk));
@@ -134,18 +139,24 @@ public class MQBuilder {
             producer = new DefaultMQProducer();
         }
         producer.setNamesrvAddr(brokers);
-        producer.setInstanceName(UUID.randomUUID().toString());
+        String instanceName = UUID.randomUUID().toString();
+        producer.setInstanceName(instanceName);
         producer.setProducerGroup(producerBuilder.getGroup());
         try {
             producer.start();
         } catch (MQClientException e) {
             throw new RuntimeException(e.getMessage());
         }
-        return new ApacheRocketMqProducerImpl(producerBuilder.getName(), producerBuilder.getTopic(), producer);
+        String topic = producerBuilder.getTopic();
+        log.info("MQ生产者初始化成功, name={}, topic={}", name, topic);
+        return new ApacheRocketMqProducerImpl(producerBuilder.getName(), topic, producer);
     }
 
     public MqConsumer buildConsumer(String name, MqConsumer.ConsumerListener consumerListener) {
         MQBuilder.ProducerConsumerBuilder consumerBuilder = getConsumerBuilder(name);
+        if (consumerBuilder == null) {
+            throw new RuntimeException("缺少MQ消费者配置, name=" + name);
+        }
         DefaultMQPushConsumer consumer;
         if (StringUtils.isNoneEmpty(ak) && StringUtils.isNoneEmpty(sk)) {
             AclClientRPCHook aclClientRPCHook = new AclClientRPCHook(new SessionCredentials(ak, sk));
@@ -160,11 +171,14 @@ public class MQBuilder {
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
 
         ApacheRocketMqConsumerImpl mqConsumer = new ApacheRocketMqConsumerImpl(consumerBuilder.getName(), consumer);
+        String topic = consumerBuilder.getTopic();
+        String tag = consumerBuilder.getTag();
         try {
-            mqConsumer.subscribe(consumerBuilder.getTopic(), consumerBuilder.getTag(), consumerListener);
+            mqConsumer.subscribe(topic, tag, consumerListener);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
+        log.info("MQ消费者初始化成功, name={}, 订阅topic={}, tag={}", name, topic, tag);
         return mqConsumer;
     }
 

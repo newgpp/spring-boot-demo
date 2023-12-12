@@ -47,15 +47,21 @@ public class ApacheRocketMqProducerImpl implements MqProducer {
                 @Override
                 public void onSuccess(final SendResult sendResult) {
                     if (callback != null) {
-                        callback.onStatus(SendStatus.SEND_OK.equals(sendResult.getSendStatus()));
+                        if (SendStatus.SEND_OK.equals(sendResult.getSendStatus())) {
+                            callback.onSuccess();
+                        } else {
+                            String msgId = sendResult.getMsgId();
+                            log.error("MQ发送消息失败, msgId={}, topic={}, tag={}, key={}, body={}", msgId, topic, tag, key, body);
+                            callback.onFail(null, topic, tag, key, body);
+                        }
                     }
                 }
 
                 @Override
                 public void onException(final Throwable e) {
-                    log.error("MQ发送消息失败, topic={}, tag={}, key={}, body={}", topic, tag, key, body);
-                    log.error("MQ发送消息失败: ", e);
-                    callback.onException(e);
+                    log.error("MQ发送消息异常, topic={}, tag={}, key={}, body={}", topic, tag, key, body);
+                    log.error("MQ发送消息异常: ", e);
+                    callback.onFail(e, topic, tag, key, body);
                 }
             });
         } catch (Exception e) {

@@ -7,9 +7,9 @@ package com.felix.mq.producer;
 public interface MqProducer {
 
     interface Callback {
-        void onStatus(boolean succeed);
+        void onSuccess();
 
-        void onException(Throwable e);
+        void onFail(Throwable e, String topic, String tag, String key, String body);
     }
 
     void shutdown();
