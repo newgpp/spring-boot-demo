@@ -1,5 +1,5 @@
 server:
-  port: 8503
+  port: 8504
 
 logging:
   level:
@@ -10,7 +10,7 @@ logging:
 
 spring:
   application:
-    name: boot-rocketmq
+    name: boot-kafka-origin
 
 com:
   felix:

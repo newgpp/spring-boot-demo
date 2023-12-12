@@ -13,6 +13,7 @@
         <module>boot-redis</module>
         <module>boot-web</module>
         <module>boot-rocketmq</module>
+        <module>boot-kafka-origin</module>
     </modules>
 
     <packaging>pom</packaging>
