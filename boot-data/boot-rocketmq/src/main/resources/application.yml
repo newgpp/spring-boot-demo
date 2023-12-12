@@ -25,6 +25,6 @@ com:
           tag: place
       consumers:
         - name: orderConsumer
-          group: group_order_01
+          group: group_order_04
           topic: topic_order
           tag: place,pay

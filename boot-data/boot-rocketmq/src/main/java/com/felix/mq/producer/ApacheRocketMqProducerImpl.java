@@ -1,6 +1,5 @@
 package com.felix.mq.producer;
 
-import com.felix.mq.MqProducer;
 import org.apache.rocketmq.client.producer.MQProducer;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;

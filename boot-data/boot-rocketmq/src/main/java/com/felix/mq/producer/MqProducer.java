@@ -1,4 +1,4 @@
-package com.felix.mq;
+package com.felix.mq.producer;
 
 /**
  * @author felix

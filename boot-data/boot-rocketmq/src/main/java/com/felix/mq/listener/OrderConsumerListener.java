@@ -1,6 +1,6 @@
-package com.felix.mq.consumer;
+package com.felix.mq.listener;
 
-import com.felix.mq.MqConsumer;
+import com.felix.mq.consumer.MqConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,8 +2,7 @@ package com.felix;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.felix.mq.MqProducer;
-import com.felix.mq.producer.ApacheRocketMqProducerImpl;
+import com.felix.mq.producer.MqProducer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ import java.util.concurrent.CountDownLatch;
 public class SpringRocketMqTest {
 
     @Autowired
-    private ApacheRocketMqProducerImpl orderPlaceProducer;
+    private MqProducer orderPlaceProducer;
     @Autowired
     private ObjectMapper objectMapper;
 
@@ -72,5 +71,14 @@ public class SpringRocketMqTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void consume_message_should_success() {
+
+        System.out.println("------------------");
+        System.out.println("111111111111111111");
+
+
     }
 }
