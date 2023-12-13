@@ -57,6 +57,11 @@ public class ApacheRocketMqConsumerImpl implements MqConsumer {
     }
 
     @Override
+    public void subscribe(String topic, ConsumerListener consumerListener) throws Exception {
+        this.subscribe(topic, null, consumerListener);
+    }
+
+    @Override
     public void shutdown() {
         mqPushConsumer.shutdown();
     }

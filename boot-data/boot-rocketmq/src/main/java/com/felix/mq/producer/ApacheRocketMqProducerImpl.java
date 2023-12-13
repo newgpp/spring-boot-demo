@@ -33,6 +33,11 @@ public class ApacheRocketMqProducerImpl implements MqProducer {
     }
 
     @Override
+    public boolean send(String key, String body) throws Exception {
+        return this.send(null, key, body);
+    }
+
+    @Override
     public boolean send(String tag, String key, String body) throws Exception {
         Message message = new Message(topic, tag, key, body.getBytes(StandardCharsets.UTF_8));
         SendResult sendResult = mqProducer.send(message);
@@ -68,6 +73,11 @@ public class ApacheRocketMqProducerImpl implements MqProducer {
             log.error("MQ发送消息失败, topic={}, tag={}, key={}, body={}", topic, tag, key, body);
             log.error("MQ发送消息失败: ", e);
         }
+    }
+
+    @Override
+    public void sendAsync(String key, String body, Callback callback) {
+        this.sendAsync(null, key, body, callback);
     }
 
     public String getName() {

@@ -9,7 +9,6 @@
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>boot-kafka</module>
         <module>boot-redis</module>
         <module>boot-web</module>
         <module>boot-rocketmq</module>

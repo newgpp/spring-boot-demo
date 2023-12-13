@@ -15,7 +15,7 @@ spring:
 com:
   felix:
     mq:
-      brokers: 192.168.197.101:9876
+      brokers: 192.168.159.111:9092
       ak:
       sk:
       producers:

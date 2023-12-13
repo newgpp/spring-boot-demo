@@ -13,6 +13,8 @@ public interface MqConsumer {
     //tags 逗号分隔 a,b,c
     void subscribe(String topic, String tags, ConsumerListener consumerListener) throws Exception;
 
+    void subscribe(String topic, ConsumerListener consumerListener) throws Exception;
+
     void shutdown();
 
 }

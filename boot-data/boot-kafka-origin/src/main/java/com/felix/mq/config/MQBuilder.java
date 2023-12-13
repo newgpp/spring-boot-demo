@@ -2,10 +2,14 @@ package com.felix.mq.config;
 
 import com.felix.mq.consumer.KafkaConsumerImpl;
 import com.felix.mq.consumer.MqConsumer;
+import com.felix.mq.producer.KafkaProducerImpl;
 import com.felix.mq.producer.MqProducer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -122,7 +126,17 @@ public class MQBuilder {
     }
 
     public MqProducer buildProducer(String name) {
-        return null;
+        ProducerConsumerBuilder producerBuilder = getProducerBuilder(name);
+        if (producerBuilder == null) {
+            throw new RuntimeException("缺少MQ消费者配置, name=" + name);
+        }
+        Properties props = new Properties();
+        props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, brokers);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.ACKS_CONFIG, "1");
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+        return new KafkaProducerImpl(name, producerBuilder.topic, producer);
     }
 
     public MqConsumer buildConsumer(String name, MqConsumer.ConsumerListener consumerListener) {
@@ -140,14 +154,11 @@ public class MQBuilder {
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 5);
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
         KafkaConsumerImpl kafkaConsumer = new KafkaConsumerImpl(name, consumer);
-
         try {
             kafkaConsumer.subscribe(consumerBuilder.topic, consumerListener);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
         return kafkaConsumer;
     }
 

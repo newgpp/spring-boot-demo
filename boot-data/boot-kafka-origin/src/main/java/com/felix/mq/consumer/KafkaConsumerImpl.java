@@ -27,19 +27,37 @@ public class KafkaConsumerImpl implements MqConsumer {
 
     @Override
     public void subscribe(String topic, String tags, ConsumerListener consumerListener) throws Exception {
+        //订阅topic
         kafkaConsumer.subscribe(Collections.singletonList(topic));
-        ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofSeconds(5L));
-        for (ConsumerRecord<String, String> record : records) {
-            int partition = record.partition();
-            long offset = record.offset();
-            String key = record.key();
-            String value = record.value();
-            log.debug("====>MQ接收消息, topic={}, key={}, value={}", topic, key, value);
-            if (!consumerListener.onConsume(tags, key, value)) {
-                log.error("====>MQ消费失败, topic={}, partition={}, offset={}, key={}, value={}", topic, partition, offset, key, value);
+
+        Runnable runnable = () -> {
+            while (true) {
+                try {
+                    ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofSeconds(5L));
+                    log.debug("====>MQ拉取消息数量, records.size()={}", records.count());
+                    for (ConsumerRecord<String, String> record : records) {
+                        int partition = record.partition();
+                        long offset = record.offset();
+                        String key = record.key();
+                        String value = record.value();
+                        log.debug("====>MQ接收消息, topic={}, partition={}, offset={}, key={}, value={}", topic, partition, offset, key, value);
+                        try {
+                            if (!consumerListener.onConsume(tags, key, value)) {
+                                log.error("====>MQ消费失败, topic={}, partition={}, offset={}, key={}, value={}", topic, partition, offset, key, value);
+                            }
+                        } catch (Exception e) {
+                            log.error("====>MQ消费异常: ", e);
+                        }
+                    }
+                    kafkaConsumer.commitSync();
+                } catch (Exception e) {
+                    log.error("====>MQ拉取消息异常: ", e);
+                }
             }
-        }
-        kafkaConsumer.commitAsync();
+        };
+
+        new Thread(runnable).start();
+
     }
 
     @Override
