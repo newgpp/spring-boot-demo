@@ -1,7 +1,7 @@
 package com.felix.mq.config;
 
 import com.felix.mq.consumer.MqConsumer;
-import com.felix.mq.listener.OrderConsumerListener;
+import com.felix.mq.handler.OrderConsumerHandler;
 import com.felix.mq.producer.MqProducer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,13 +25,13 @@ public class MQConfiguration {
         return mqBuilder.buildProducer("orderPlaceProducer");
     }
 
-    @Bean("orderConsumerListener")
-    public MqConsumer.ConsumerListener orderConsumer() {
-        return new OrderConsumerListener();
+    @Bean("orderConsumerHandler")
+    public MqConsumer.ConsumerHandler orderConsumerHandler() {
+        return new OrderConsumerHandler();
     }
 
     @Bean("orderConsumer")
-    public MqConsumer orderPlaceConsumer(@Qualifier("orderConsumerListener") MqConsumer.ConsumerListener orderConsumerListener) {
-        return mqBuilder.buildConsumer("orderConsumer", orderConsumerListener);
+    public MqConsumer orderPlaceConsumer(@Qualifier("orderConsumerHandler") MqConsumer.ConsumerHandler orderConsumerHandler) {
+        return mqBuilder.buildConsumer("orderConsumer", orderConsumerHandler);
     }
 }

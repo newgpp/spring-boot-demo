@@ -152,7 +152,7 @@ public class MQBuilder {
         return new ApacheRocketMqProducerImpl(producerBuilder.getName(), topic, producer);
     }
 
-    public MqConsumer buildConsumer(String name, MqConsumer.ConsumerListener consumerListener) {
+    public MqConsumer buildConsumer(String name, MqConsumer.ConsumerHandler consumerHandler) {
         MQBuilder.ProducerConsumerBuilder consumerBuilder = getConsumerBuilder(name);
         if (consumerBuilder == null) {
             throw new RuntimeException("缺少MQ消费者配置, name=" + name);
@@ -174,7 +174,7 @@ public class MQBuilder {
         String topic = consumerBuilder.getTopic();
         String tag = consumerBuilder.getTag();
         try {
-            mqConsumer.subscribe(topic, tag, consumerListener);
+            mqConsumer.subscribe(topic, tag, consumerHandler);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

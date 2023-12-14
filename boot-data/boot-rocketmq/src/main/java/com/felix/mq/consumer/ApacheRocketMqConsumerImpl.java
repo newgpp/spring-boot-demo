@@ -27,7 +27,7 @@ public class ApacheRocketMqConsumerImpl implements MqConsumer {
     }
 
     @Override
-    public void subscribe(String topic, String tags, ConsumerListener consumerListener) throws Exception {
+    public void subscribe(String topic, String tags, ConsumerHandler consumerHandler) throws Exception {
         if (tags != null && !tags.trim().isEmpty()) {
             tags = String.join(" || ", tags.split(","));
         }
@@ -43,7 +43,7 @@ public class ApacheRocketMqConsumerImpl implements MqConsumer {
                     byte[] msgBody = msg.getBody();
                     String value = new String(msgBody);
                     log.debug("====>MQ接收消息, topic={}, tag={}, key={}, value={}", topic, tags, keys, value);
-                    if (!consumerListener.onConsume(tags, keys, value)) {
+                    if (!consumerHandler.onConsume(tags, keys, value)) {
                         String msgId = msg.getMsgId();
                         int reconsumeTimes = msg.getReconsumeTimes();
                         log.error("====>MQ消费失败-重新消费, topic={}, msgId={}, reconsumeTimes={}, tag={}, key={}, value={}", msgId, reconsumeTimes, topic, tags, keys, value);
@@ -57,8 +57,8 @@ public class ApacheRocketMqConsumerImpl implements MqConsumer {
     }
 
     @Override
-    public void subscribe(String topic, ConsumerListener consumerListener) throws Exception {
-        this.subscribe(topic, null, consumerListener);
+    public void subscribe(String topic, ConsumerHandler consumerHandler) throws Exception {
+        this.subscribe(topic, null, consumerHandler);
     }
 
     @Override

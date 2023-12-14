@@ -6,14 +6,14 @@ package com.felix.mq.consumer;
  */
 public interface MqConsumer {
 
-    interface ConsumerListener{
+    interface ConsumerHandler {
         boolean onConsume(String tag, String key, String body);
     }
 
     //tags 逗号分隔 a,b,c
-    void subscribe(String topic, String tags, ConsumerListener consumerListener) throws Exception;
+    void subscribe(String topic, String tags, ConsumerHandler consumerHandler) throws Exception;
 
-    void subscribe(String topic, ConsumerListener consumerListener) throws Exception;
+    void subscribe(String topic, ConsumerHandler consumerHandler) throws Exception;
 
     void shutdown();
 

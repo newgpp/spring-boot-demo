@@ -139,7 +139,7 @@ public class MQBuilder {
         return new KafkaProducerImpl(name, producerBuilder.topic, producer);
     }
 
-    public MqConsumer buildConsumer(String name, MqConsumer.ConsumerListener consumerListener) {
+    public MqConsumer buildConsumer(String name, MqConsumer.ConsumerHandler consumerHandler) {
         MQBuilder.ProducerConsumerBuilder consumerBuilder = getConsumerBuilder(name);
         if (consumerBuilder == null) {
             throw new RuntimeException("缺少MQ消费者配置, name=" + name);
@@ -155,7 +155,7 @@ public class MQBuilder {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
         KafkaConsumerImpl kafkaConsumer = new KafkaConsumerImpl(name, consumer);
         try {
-            kafkaConsumer.subscribe(consumerBuilder.topic, consumerListener);
+            kafkaConsumer.subscribe(consumerBuilder.topic, consumerHandler);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

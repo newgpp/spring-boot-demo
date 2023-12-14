@@ -26,7 +26,7 @@ public class KafkaConsumerImpl implements MqConsumer {
     }
 
     @Override
-    public void subscribe(String topic, String tags, ConsumerListener consumerListener) throws Exception {
+    public void subscribe(String topic, String tags, ConsumerHandler consumerHandler) throws Exception {
         //订阅topic
         kafkaConsumer.subscribe(Collections.singletonList(topic));
 
@@ -42,7 +42,7 @@ public class KafkaConsumerImpl implements MqConsumer {
                         String value = record.value();
                         log.debug("====>MQ接收消息, topic={}, partition={}, offset={}, key={}, value={}", topic, partition, offset, key, value);
                         try {
-                            if (!consumerListener.onConsume(tags, key, value)) {
+                            if (!consumerHandler.onConsume(tags, key, value)) {
                                 log.error("====>MQ消费失败, topic={}, partition={}, offset={}, key={}, value={}", topic, partition, offset, key, value);
                             }
                         } catch (Exception e) {
@@ -61,8 +61,8 @@ public class KafkaConsumerImpl implements MqConsumer {
     }
 
     @Override
-    public void subscribe(String topic, ConsumerListener consumerListener) throws Exception {
-        this.subscribe(topic, null, consumerListener);
+    public void subscribe(String topic, ConsumerHandler consumerHandler) throws Exception {
+        this.subscribe(topic, null, consumerHandler);
     }
 
     @Override
