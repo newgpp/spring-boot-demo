@@ -1,10 +1,13 @@
 package com.felix.mq.config;
 
 import com.felix.mq.consumer.MqConsumer;
+import com.felix.mq.consumer.RedisConsumerImpl;
 import com.felix.mq.producer.MqProducer;
+import com.felix.mq.producer.RedisProducerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import redis.clients.jedis.Jedis;
 
 import java.util.List;
 import java.util.Objects;
@@ -121,7 +124,9 @@ public class MQBuilder {
         if (producerBuilder == null) {
             throw new RuntimeException("缺少MQ消费者配置, name=" + name);
         }
-        return null;
+        Jedis jedis = new Jedis(brokers);
+        jedis.auth(ak);
+        return new RedisProducerImpl(name, producerBuilder.topic, jedis);
     }
 
     public MqConsumer buildConsumer(String name, MqConsumer.ConsumerHandler consumerHandler) {
@@ -129,8 +134,15 @@ public class MQBuilder {
         if (consumerBuilder == null) {
             throw new RuntimeException("缺少MQ消费者配置, name=" + name);
         }
-        return null;
+        Jedis jedis = new Jedis(brokers);
+        jedis.auth(ak);
+        RedisConsumerImpl redisConsumer = new RedisConsumerImpl(name, jedis);
+        //订阅
+        try {
+            redisConsumer.subscribe(consumerBuilder.topic, consumerHandler);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return redisConsumer;
     }
-
-
 }

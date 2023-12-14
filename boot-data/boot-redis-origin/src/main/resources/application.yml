@@ -11,15 +11,15 @@ logging:
 spring:
   application:
     name: boot-redis-origin
-  redis:
-    host: 192.168.159.111
-    port: 6379
-    database: 0
-    password: redis123
-    timeout: 10000
-    lettuce:
-      pool:
-        max-active: 50
-        min-idle: 5
-        max-idle: 50
-        max-wait: 5000
+
+com:
+  felix:
+    mq:
+      brokers: redis://192.168.197.101:6379
+      ak: redis123
+      producers:
+        - name: orderPlaceProducer
+          topic: order_topic
+      consumers:
+        - name: orderConsumer
+          topic: order_topic

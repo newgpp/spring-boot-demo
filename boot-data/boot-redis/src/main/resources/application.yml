@@ -23,3 +23,20 @@ spring:
         min-idle: 5
         max-idle: 50
         max-wait: 5000
+
+com:
+  felix:
+    mq:
+      brokers: 192.168.159.111:6379
+      ak:
+      sk:
+      producers:
+        - name: orderPlaceProducer
+          group: order_01_group
+          topic: order_topic
+          tag: place
+      consumers:
+        - name: orderConsumer
+          group: order_01_group
+          topic: order_topic
+          tag: place,pay
