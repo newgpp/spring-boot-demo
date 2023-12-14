@@ -8,6 +8,7 @@ import org.apache.rocketmq.common.message.MessageExt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PreDestroy;
 import java.util.List;
 
 /**
@@ -43,10 +44,16 @@ public class ApacheRocketMqConsumerImpl implements MqConsumer {
                     byte[] msgBody = msg.getBody();
                     String value = new String(msgBody);
                     log.debug("====>MQ接收消息, topic={}, tag={}, key={}, value={}", topic, tags, keys, value);
-                    if (!consumerHandler.onConsume(tags, keys, value)) {
-                        String msgId = msg.getMsgId();
-                        int reconsumeTimes = msg.getReconsumeTimes();
-                        log.error("====>MQ消费失败-重新消费, topic={}, msgId={}, reconsumeTimes={}, tag={}, key={}, value={}", msgId, reconsumeTimes, topic, tags, keys, value);
+                    try {
+                        if (!consumerHandler.onConsume(tags, keys, value)) {
+                            String msgId = msg.getMsgId();
+                            int reconsumeTimes = msg.getReconsumeTimes();
+                            log.error("====>MQ消费失败-重新消费, topic={}, msgId={}, reconsumeTimes={}, tag={}, key={}, value={}", msgId, reconsumeTimes, topic, tags, keys, value);
+                            return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+                        }
+                    } catch (Exception e) {
+                        log.error("====>MQ消费异常, topic={}, msgId={}, reconsumeTimes={}, tag={}, key={}, value={}", msg.getMsgId(), msg.getReconsumeTimes(), topic, tags, keys, value);
+                        log.error("====>MQ消费异常: ", e);
                         return ConsumeConcurrentlyStatus.RECONSUME_LATER;
                     }
                 }
@@ -62,6 +69,7 @@ public class ApacheRocketMqConsumerImpl implements MqConsumer {
     }
 
     @Override
+    @PreDestroy
     public void shutdown() {
         mqPushConsumer.shutdown();
     }

@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 /**
@@ -41,9 +41,9 @@ public class SpringKafkaTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+
         try {
-            countDownLatch.await();
+            TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -51,7 +51,6 @@ public class SpringKafkaTest {
 
     @Test
     public void send_message_async_should_success() {
-
         Stream.iterate(0, x -> x + 1).limit(50).forEach(x -> {
             ObjectNode o2 = objectMapper.createObjectNode();
             o2.put("type", "async");
@@ -76,17 +75,12 @@ public class SpringKafkaTest {
                 e.printStackTrace();
             }
         });
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+
         try {
-            countDownLatch.await();
+            TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
 
-    @Test
-    public void consume_message_should_success() {
-        System.out.println("------------------");
-        System.out.println("111111111111111111");
     }
 }
