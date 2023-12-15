@@ -21,8 +21,6 @@ public class RedisConsumerImpl implements MqConsumer {
 
     @Override
     public void subscribe(String topic, String tags, ConsumerHandler consumerHandler) throws Exception {
-
-
         JedisPubSub jedisPubSub = new JedisPubSub() {
             @Override
             public void onMessage(String channel, String message) {
@@ -36,11 +34,7 @@ public class RedisConsumerImpl implements MqConsumer {
                 }
             }
         };
-
-        Runnable runnable = () -> {
-            jedis.subscribe(jedisPubSub, topic);
-        };
-
+        Runnable runnable = () -> jedis.subscribe(jedisPubSub, topic);
         new Thread(runnable).start();
     }
 

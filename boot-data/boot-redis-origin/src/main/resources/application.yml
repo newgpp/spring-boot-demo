@@ -15,7 +15,7 @@ spring:
 com:
   felix:
     mq:
-      brokers: redis://192.168.197.101:6379
+      brokers: redis://192.168.159.111:6379
       ak: redis123
       producers:
         - name: orderPlaceProducer
