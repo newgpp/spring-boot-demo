@@ -1,14 +1,17 @@
 package com.felix.mysql;
 
+import com.alibaba.fastjson2.JSON;
 import com.felix.utils.IdUtils;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -44,14 +47,17 @@ public class DbUtilsTest {
     private static final String driverClass = "com.mysql.cj.jdbc.Driver";
     private static final String userName = "root";
     private static final String password = "123456";
-    private static final BasicDataSource dataSource = new BasicDataSource();
+
+    private static QueryRunner queryRunner;
 
     @Before
     public void init() {
+        BasicDataSource dataSource = new BasicDataSource();
         dataSource.setUrl(jdbcUrl);
         dataSource.setDriverClassName(driverClass);
         dataSource.setUsername(userName);
         dataSource.setPassword(password);
+        queryRunner = new QueryRunner(dataSource);
     }
 
     private Object randomGet(Object[] arr) {
@@ -61,7 +67,7 @@ public class DbUtilsTest {
     }
 
     @Test
-    public void insert_data_should_success() throws Exception {
+    public void insert_data_should_success() {
         //given
         String sql = "insert into sys_oper_log(oper_id, title, business_type, method, request_method, operator_type, oper_name, dept_name, oper_url, oper_ip, oper_location, oper_param, status, error_msg, oper_time) values" +
                 "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -81,22 +87,34 @@ public class DbUtilsTest {
         Object[] error_msgs = {"", null, "系统错误", "Error:NullPointerException", "success"};
         Object[] oper_times = {"2023-12-19 00:10:09", "2023-09-20 17:59:58", "2023-10-19 00:10:09", "2023-03-19 12:05:09", "2023-04-20 14:19:23", "2023-07-10 18:09:46"};
         //when
-        QueryRunner queryRunner = new QueryRunner();
-        Connection connection = dataSource.getConnection();
-        Stream.iterate(0, x -> x + 1).limit(10000).forEach(x -> {
+        Stream.iterate(0, x -> x + 1).limit(10).forEach(x -> {
             try {
-                PreparedStatement ps = connection.prepareStatement(sql);
-                queryRunner.fillStatement(ps, IdUtils.nextSnowflakeId(), randomGet(titles), randomGet(business_types), randomGet(methods), randomGet(request_methods), randomGet(operator_types)
+                Object[] params = new Object[]{IdUtils.nextSnowflakeId(), randomGet(titles), randomGet(business_types), randomGet(methods), randomGet(request_methods), randomGet(operator_types)
                         , randomGet(oper_names), randomGet(dept_names), randomGet(oper_urls), randomGet(oper_ips), randomGet(oper_locations), randomGet(oper_params), randomGet(statuss)
-                        , randomGet(error_msgs), randomGet(oper_times));
-                int i = ps.executeUpdate();
+                        , randomGet(error_msgs), randomGet(oper_times)};
+                Object insert = queryRunner.insert(sql, new ScalarHandler<>(), params);
+                System.out.println(insert);
                 //then
-                System.out.println(i);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
-        connection.close();
+    }
+
+    @Test
+    public void query_list_should_success() {
+        //given
+        String sql = "select * from sys_oper_log where id in (1, 2)";
+        //when
+        try {
+            List<Map<String, Object>> list = queryRunner.query(sql, new MapListHandler());
+            //then
+            for (Map<String, Object> line : list) {
+                System.out.println(JSON.toJSONString(line));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
