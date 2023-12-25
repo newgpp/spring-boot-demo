@@ -6,8 +6,11 @@ logging:
     root: info
     com.felix: debug
   customize:
-    appender: console
+    appender: kafka
 
 spring:
   application:
     name: boot-web
+
+kafka:
+  brokers: 192.168.159.111:9092
