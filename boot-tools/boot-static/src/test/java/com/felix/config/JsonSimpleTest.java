@@ -17,8 +17,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class JsonSimpleTest {
@@ -166,6 +166,52 @@ public class JsonSimpleTest {
         //then
         Assert.assertNotNull(objectNodes);
         Assert.assertEquals(3, objectNodes.size());
+    }
+
+    @Test
+    public void convert_to_csv() {
+        //given
+        ObjectMapper mapper = new ObjectMapper(new JsonFactory());
+        //中划线转驼峰
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE);
+        //when
+        InputStream is = JsonSimpleTest.class.getClassLoader().getResourceAsStream("水闸.json");
+        ObjectNode node = null;
+        try {
+            node = mapper.readValue(is, ObjectNode.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        List<String> lines = new ArrayList<>();
+        ArrayNode nodes = (ArrayNode) node.get("geometries");
+        String out = "水闸名称,经度,纬度,所在行政区,所在地点,所在河流,水闸孔数,闸孔净宽,闸底板高程,闸门顶高程,闸墩高程,排架高程,闸门型式,启闭机,启闭机型式,电机功率,设计标准";
+        lines.add(out);
+        for (JsonNode jsonNode : nodes) {
+            List<String> fields = new ArrayList<>();
+            fields.add(Objects.toString(jsonNode.get("properties").get("stnm"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("lon"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("lat"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("adnm"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("dmstatpl"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("enrvnm3"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("kgdatem"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("gtorzsz"), ""));
+            fields.add("");
+            fields.add("");
+            fields.add(Objects.toString(jsonNode.get("properties").get("engsdate"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("engsdatem"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("gttype"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("kgdatem"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("zyjzjb"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("kgdate"), ""));
+            fields.add(Objects.toString(jsonNode.get("properties").get("fgtornb"), ""));
+            lines.add(String.join(",", fields));
+        }
+
+        for (String line : lines) {
+            System.out.println(line);
+        }
     }
 
 }
