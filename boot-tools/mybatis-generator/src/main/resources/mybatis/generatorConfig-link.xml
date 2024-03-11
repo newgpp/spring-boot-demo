@@ -38,14 +38,14 @@
         </javaTypeResolver>
         <!--java模型生成配置-->
         <!--targetPackage 有个特殊值MAVEN，大小写敏感，如果设置这个值，则默认生成到maven的输出路径，target/..;也可以设置正常路径，如：src/mybatis,但是相应目录必须存在-->
-        <javaModelGenerator targetPackage="model" targetProject="micro-tools\mybatis-generator\src\mybatis">
+        <javaModelGenerator targetPackage="model" targetProject="F:\Idea Projects\spring-boot-demo\boot-tools\mybatis-generator\src\mybatis">
             <!--在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false-->
             <property name="enableSubPackages" value="true"/>
             <!--设置是否在setter方法中，对String类型字段调用trim()方法-->
             <property name="trimStrings" value="false"/>
         </javaModelGenerator>
         <!--映射文件生成配置-->
-        <sqlMapGenerator targetPackage="xml" targetProject="micro-tools\mybatis-generator\src\mybatis">
+        <sqlMapGenerator targetPackage="xml" targetProject="F:\Idea Projects\spring-boot-demo\boot-tools\mybatis-generator\src\mybatis">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
@@ -54,7 +54,7 @@
          2. MIXEDMAPPER：使用混合配置，会生成Mapper接口，并适当添加合适的Annotation，但是XML会生成在XML中；
          3. XMLMAPPER：会生成Mapper接口，接口完全依赖XML；
         -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="dao" targetProject="micro-tools\mybatis-generator\src\mybatis">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="dao" targetProject="F:\Idea Projects\spring-boot-demo\boot-tools\mybatis-generator\src\mybatis">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
