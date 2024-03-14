@@ -2,20 +2,17 @@ package com.felix.config;
 
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LineReadTest {
+public class LineReadWriteTest {
 
     @Test
     public void read_line_should_success() {
         //given
-        InputStream inputStream = LineReadTest.class.getClassLoader().getResourceAsStream("ids.csv");
+        InputStream inputStream = LineReadWriteTest.class.getClassLoader().getResourceAsStream("ids.csv");
 
         //when
         List<String> lines = new ArrayList<>();
@@ -32,7 +29,19 @@ public class LineReadTest {
         //then
         String collect = String.join(",", lines);
         System.out.println(collect.getBytes(StandardCharsets.UTF_8).length);
+    }
 
-
+    @Test
+    public void write_line_should_success() throws Exception {
+        //given
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("out.csv")))) {
+            out.println("aaa1123132");
+            out.println("1123132");
+            out.println("1123132");
+            out.println("1123132");
+            out.println("1123132");
+            out.println("1123132");
+            out.flush();
+        }
     }
 }
