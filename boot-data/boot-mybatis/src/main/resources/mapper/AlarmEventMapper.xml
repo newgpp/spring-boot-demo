@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.felix.dao.AlarmEventMapper">
+  <resultMap id="BaseResultMap" type="com.felix.entity.AlarmEvent">
+    <id column="alarmEventId" jdbcType="BIGINT" property="alarmEventId" />
+    <result column="alarmEventCodeOrigin" jdbcType="VARCHAR" property="alarmEventCodeOrigin" />
+    <result column="alarmEventType" jdbcType="TINYINT" property="alarmEventType" />
+    <result column="parkId" jdbcType="BIGINT" property="parkId" />
+    <result column="areaId" jdbcType="BIGINT" property="areaId" />
+    <result column="berthId" jdbcType="BIGINT" property="berthId" />
+    <result column="parentParkId" jdbcType="BIGINT" property="parentParkId" />
+    <result column="longitude" jdbcType="INTEGER" property="longitude" />
+    <result column="latitude" jdbcType="INTEGER" property="latitude" />
+    <result column="reportTs" jdbcType="BIGINT" property="reportTs" />
+    <result column="finishTs" jdbcType="BIGINT" property="finishTs" />
+    <result column="finishState" jdbcType="TINYINT" property="finishState" />
+    <result column="alarmInfo" jdbcType="VARCHAR" property="alarmInfo" />
+    <result column="eventState" jdbcType="TINYINT" property="eventState" />
+    <result column="createdTime" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updatedTime" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.felix.entity.AlarmEvent">
+    <result column="alarmJson" jdbcType="LONGVARCHAR" property="alarmJson" typeHandler="com.felix.dao.JsonTypeHandler" javaType="com.fasterxml.jackson.databind.node.ObjectNode"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    alarmEventId, alarmEventCodeOrigin, alarmEventType, parkId, areaId, berthId, parentParkId,
+    longitude, latitude, reportTs, finishTs, finishState, alarmInfo, eventState, createdTime, updatedTime
+  </sql>
+  <sql id="Blob_Column_List">
+    alarmJson
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_alarm_event
+    where alarmEventId = #{alarmEventId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_alarm_event
+    where alarmEventId = #{alarmEventId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.felix.entity.AlarmEvent">
+    insert into t_alarm_event (alarmEventId, alarmEventCodeOrigin, 
+      alarmEventType, parkId, areaId, berthId,
+      parentParkId, longitude, latitude, 
+      reportTs, finishTs, finishState, alarmInfo,
+      eventState, createdTime, updatedTime, 
+      alarmJson)
+    values (#{alarmEventId,jdbcType=BIGINT}, #{alarmEventCodeOrigin,jdbcType=VARCHAR}, 
+      #{alarmEventType,jdbcType=TINYINT}, #{parkId,jdbcType=BIGINT}, #{areaId,jdbcType=BIGINT}, #{berthId,jdbcType=BIGINT},
+      #{parentParkId,jdbcType=BIGINT}, #{longitude,jdbcType=INTEGER}, #{latitude,jdbcType=INTEGER},
+      #{reportTs,jdbcType=BIGINT}, #{finishTs,jdbcType=BIGINT}, #{finishState,jdbcType=TINYINT}, #{alarmInfo,jdbcType=VARCHAR},
+      #{eventState,jdbcType=TINYINT}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{alarmJson,jdbcType=LONGVARCHAR, typeHandler=com.felix.dao.JsonTypeHandler, javaType=com.fasterxml.jackson.databind.node.ObjectNode})
+  </insert>
+  <insert id="insertSelective" parameterType="com.felix.entity.AlarmEvent">
+    insert into t_alarm_event
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="alarmEventId != null">
+        alarmEventId,
+      </if>
+      <if test="alarmEventCodeOrigin != null">
+        alarmEventCodeOrigin,
+      </if>
+      <if test="alarmEventType != null">
+        alarmEventType,
+      </if>
+      <if test="parkId != null">
+        parkId,
+      </if>
+      <if test="areaId != null">
+        areaId,
+      </if>
+      <if test="berthId != null">
+        berthId,
+      </if>
+      <if test="parentParkId != null">
+        parentParkId,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="reportTs != null">
+        reportTs,
+      </if>
+      <if test="finishTs != null">
+        finishTs,
+      </if>
+      <if test="finishState != null">
+        finishState,
+      </if>
+      <if test="alarmInfo != null">
+        alarmInfo,
+      </if>
+      <if test="eventState != null">
+        eventState,
+      </if>
+      <if test="createdTime != null">
+        createdTime,
+      </if>
+      <if test="updatedTime != null">
+        updatedTime,
+      </if>
+      <if test="alarmJson != null">
+        alarmJson,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="alarmEventId != null">
+        #{alarmEventId,jdbcType=BIGINT},
+      </if>
+      <if test="alarmEventCodeOrigin != null">
+        #{alarmEventCodeOrigin,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmEventType != null">
+        #{alarmEventType,jdbcType=TINYINT},
+      </if>
+      <if test="parkId != null">
+        #{parkId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null">
+        #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="berthId != null">
+        #{berthId,jdbcType=BIGINT},
+      </if>
+      <if test="parentParkId != null">
+        #{parentParkId,jdbcType=BIGINT},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=INTEGER},
+      </if>
+      <if test="reportTs != null">
+        #{reportTs,jdbcType=BIGINT},
+      </if>
+      <if test="finishTs != null">
+        #{finishTs,jdbcType=BIGINT},
+      </if>
+      <if test="finishState != null">
+        #{finishState,jdbcType=TINYINT},
+      </if>
+      <if test="alarmInfo != null">
+        #{alarmInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="eventState != null">
+        #{eventState,jdbcType=TINYINT},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alarmJson != null">
+        #{alarmJson,jdbcType=LONGVARCHAR, typeHandler=com.felix.dao.JsonTypeHandler, javaType=com.fasterxml.jackson.databind.node.ObjectNode},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.felix.entity.AlarmEvent">
+    update t_alarm_event
+    <set>
+      <if test="alarmEventCodeOrigin != null">
+        alarmEventCodeOrigin = #{alarmEventCodeOrigin,jdbcType=VARCHAR},
+      </if>
+      <if test="alarmEventType != null">
+        alarmEventType = #{alarmEventType,jdbcType=TINYINT},
+      </if>
+      <if test="parkId != null">
+        parkId = #{parkId,jdbcType=BIGINT},
+      </if>
+      <if test="areaId != null">
+        areaId = #{areaId,jdbcType=BIGINT},
+      </if>
+      <if test="berthId != null">
+        berthId = #{berthId,jdbcType=BIGINT},
+      </if>
+      <if test="parentParkId != null">
+        parentParkId = #{parentParkId,jdbcType=BIGINT},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=INTEGER},
+      </if>
+      <if test="reportTs != null">
+        reportTs = #{reportTs,jdbcType=BIGINT},
+      </if>
+      <if test="finishTs != null">
+        finishTs = #{finishTs,jdbcType=BIGINT},
+      </if>
+      <if test="finishState != null">
+        finishState = #{finishState,jdbcType=TINYINT},
+      </if>
+      <if test="alarmInfo != null">
+        alarmInfo = #{alarmInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="eventState != null">
+        eventState = #{eventState,jdbcType=TINYINT},
+      </if>
+      <if test="createdTime != null">
+        createdTime = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        updatedTime = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="alarmJson != null">
+        alarmJson = #{alarmJson,jdbcType=LONGVARCHAR, typeHandler=com.felix.dao.JsonTypeHandler, javaType=com.fasterxml.jackson.databind.node.ObjectNode},
+      </if>
+    </set>
+    where alarmEventId = #{alarmEventId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.felix.entity.AlarmEvent">
+    update t_alarm_event
+    set alarmEventCodeOrigin = #{alarmEventCodeOrigin,jdbcType=VARCHAR},
+      alarmEventType = #{alarmEventType,jdbcType=TINYINT},
+      parkId = #{parkId,jdbcType=BIGINT},
+      areaId = #{areaId,jdbcType=BIGINT},
+      berthId = #{berthId,jdbcType=BIGINT},
+      parentParkId = #{parentParkId,jdbcType=BIGINT},
+      longitude = #{longitude,jdbcType=INTEGER},
+      latitude = #{latitude,jdbcType=INTEGER},
+      reportTs = #{reportTs,jdbcType=BIGINT},
+      finishTs = #{finishTs,jdbcType=BIGINT},
+      finishState = #{finishState,jdbcType=TINYINT},
+      alarmInfo = #{alarmInfo,jdbcType=VARCHAR},
+      eventState = #{eventState,jdbcType=TINYINT},
+      createdTime = #{createdTime,jdbcType=TIMESTAMP},
+      updatedTime = #{updatedTime,jdbcType=TIMESTAMP},
+      alarmJson = #{alarmJson,jdbcType=LONGVARCHAR, typeHandler=com.felix.dao.JsonTypeHandler, javaType=com.fasterxml.jackson.databind.node.ObjectNode}
+    where alarmEventId = #{alarmEventId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.felix.entity.AlarmEvent">
+    update t_alarm_event
+    set alarmEventCodeOrigin = #{alarmEventCodeOrigin,jdbcType=VARCHAR},
+      alarmEventType = #{alarmEventType,jdbcType=TINYINT},
+      parkId = #{parkId,jdbcType=BIGINT},
+      areaId = #{areaId,jdbcType=BIGINT},
+      berthId = #{berthId,jdbcType=BIGINT},
+      parentParkId = #{parentParkId,jdbcType=BIGINT},
+      longitude = #{longitude,jdbcType=INTEGER},
+      latitude = #{latitude,jdbcType=INTEGER},
+      reportTs = #{reportTs,jdbcType=BIGINT},
+      finishTs = #{finishTs,jdbcType=BIGINT},
+      finishState = #{finishState,jdbcType=TINYINT},
+      alarmInfo = #{alarmInfo,jdbcType=VARCHAR},
+      eventState = #{eventState,jdbcType=TINYINT},
+      createdTime = #{createdTime,jdbcType=TIMESTAMP},
+      updatedTime = #{updatedTime,jdbcType=TIMESTAMP}
+    where alarmEventId = #{alarmEventId,jdbcType=BIGINT}
+  </update>
+  <select id="selectLatestEvents" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_alarm_event
+    where alarmEventType in
+    <foreach item="item" collection="alarmEventTypes" separator="," open="(" close=")" index="">#{item}</foreach>
+    order by reportTs desc
+    limit #{limit}
+  </select>
+  <delete id="deleteByAlarmEventType" parameterType="java.lang.Integer">
+    delete from t_alarm_event
+    where alarmEventType = #{alarmEventType,jdbcType=TINYINT}
+  </delete>
+  <select id="selectByCodeReportTs"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_alarm_event
+    where alarmEventCodeOrigin = #{alarmEventCodeOrigin,jdbcType=VARCHAR}
+    and reportTs = #{reportTs,jdbcType=BIGINT}
+  </select>
+  <select id="selectUnfinishedEvents" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_alarm_event
+    where alarmEventType = #{alarmEventType,jdbcType=TINYINT} and finishState = 0
+    order by reportTs desc
+    limit #{limit}
+  </select>
+
+  <update id="updateFinishedEvent">
+    update t_alarm_event
+    set finishTs = #{finishTs, jdbcType=BIGINT}, finishState = 1
+    where alarmEventCodeOrigin = #{alarmEventCodeOrigin,jdbcType=VARCHAR}
+    order by reportTs desc limit 1
+  </update>
+
+  <select id="selectList" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_alarm_event
+    where 1 = 1
+    <if test="alarmEventType != null">
+      AND alarmEventType = #{alarmEventType,jdbcType=TINYINT}
+    </if>
+    <if test="parkId != null">
+      AND parkId = #{parkId,jdbcType=BIGINT}
+    </if>
+    <if test="berthId != null">
+      AND berthId = #{berthId,jdbcType=BIGINT}
+    </if>
+    <if test="finishState != null">
+      AND finishState = #{finishState,jdbcType=TINYINT}
+    </if>
+    <if test="reportTsStart != null">
+      AND reportTs >= #{reportTsStart,jdbcType=BIGINT}
+    </if>
+    <if test="reportTsEnd != null">
+      AND reportTs <![CDATA[<=]]> #{reportTsEnd,jdbcType=BIGINT}
+    </if>
+    order by reportTs desc
+  </select>
+
+  <select id="getLatestEvent"  resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_alarm_event
+    where 1 = 1 AND alarmEventType = #{alarmEventType,jdbcType=TINYINT} AND berthId = #{berthId,jdbcType=BIGINT}
+    order by reportTs desc limit #{limit}
+  </select>
+
+</mapper>

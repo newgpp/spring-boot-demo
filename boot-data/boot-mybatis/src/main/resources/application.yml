@@ -1,0 +1,34 @@
+server:
+  port: 8510
+
+logging:
+  level:
+    root: info
+    com.felix: debug
+  customize:
+    appender: console
+
+mybatis:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  configuration:
+    cache-enabled: false
+
+spring:
+  application:
+    name: boot-mybatis
+  datasource:
+    url: jdbc:mysql://192.168.159.111:3306/transaction_db?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      validation-timeout: '1000'
+      idle-timeout: '30000'
+      maximum-pool-size: '10'
+      auto-commit: 'true'
+      connection-timeout: '10000'
+      pool-name: HikariCP
+      max-lifetime: '900000'
+      connection-test-query: SELECT 1
+      minimum-idle: '3'

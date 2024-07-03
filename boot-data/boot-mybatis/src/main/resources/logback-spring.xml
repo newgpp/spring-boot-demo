@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+    <springProperty scope="context" name="logLevel" source="logging.customize.level" defaultValue="info"/>
+    <springProperty scope="context" name="logPath" source="logging.customize.path" defaultValue="/data/logs"/>
+    <springProperty scope="context" name="logAppender" source="logging.customize.appender" defaultValue="console"/>
+    <springProperty scope="context" name="serverName" source="spring.application.name" defaultValue="micro-ignore"/>
+    <springProperty scope="context" name="brokers" source="kafka.brokers" defaultValue="micro-ignore"/>
+    <property name="consoleLogPattern"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="fileLogPattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${consoleLogPattern}</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/${serverName}/${serverName}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${fileLogPattern}</pattern>
+        </encoder>
+    </appender>
+
+    <root>
+        <level value="${logLevel}" />
+        <appender-ref ref="${logAppender}" />
+    </root>
+
+</configuration>
