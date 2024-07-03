@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @desc some desc
  */
 @SpringBootApplication
-public class WebApplication {
+public class MybatisApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WebApplication.class, args);
+        SpringApplication.run(MybatisApplication.class, args);
     }
 }

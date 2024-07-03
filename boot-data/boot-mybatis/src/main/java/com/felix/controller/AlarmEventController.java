@@ -1,6 +1,5 @@
 package com.felix.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.felix.dao.AlarmEventMapper;
 import com.felix.entity.AlarmEvent;
 import com.felix.vo.PageResult;
@@ -24,8 +23,6 @@ public class AlarmEventController {
 
     @Resource
     private AlarmEventMapper alarmEventMapper;
-    @Resource
-    private ObjectMapper objectMapper;
 
     @GetMapping("/page")
     public PageResult<AlarmEvent> getPage(@RequestParam("alarmEventType") Integer alarmEventType,
@@ -35,7 +32,7 @@ public class AlarmEventController {
         map.put("alarmEventType", alarmEventType);
         PageResult<AlarmEvent> pageVO = new PageResult<>();
         try {
-            log.info("======>getPage param: {}", objectMapper.writeValueAsString(map));
+            log.debug("======>getPage param: {}", map);
             Page<AlarmEvent> page = PageHelper.startPage(pageNum, pageSize)
                     .doSelectPage(() -> alarmEventMapper.selectList(map));
             pageVO.setPageNum(pageNum);
@@ -52,6 +49,7 @@ public class AlarmEventController {
     @GetMapping("/latest")
     public List<AlarmEvent> getLatest(@RequestParam(name = "limit", defaultValue = "15") Integer limit) {
         try {
+            log.debug("======>getPage param: limit={}", limit);
             return alarmEventMapper.selectLatestEvents(Arrays.asList(0, 4), limit);
         } catch (Exception e) {
             log.error("======>getLatest error: ", e);

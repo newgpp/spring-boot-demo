@@ -1,6 +1,6 @@
 package com.felix.vo;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PageResult<T> {
@@ -8,7 +8,7 @@ public class PageResult<T> {
     private int pageNum;
     private int pageSize;
     private long total;
-    private List<T> list = new ArrayList<>();
+    private List<T> list = Collections.emptyList();
 
     public int getPageNum() {
         return pageNum;
