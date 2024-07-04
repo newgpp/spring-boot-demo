@@ -11,6 +11,7 @@
     <modules>
         <module>boot-web</module>
         <module>boot-mybatis</module>
+        <module>boot-io</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -1,0 +1,13 @@
+server:
+  port: 8511
+
+logging:
+  level:
+    root: info
+    com.felix: debug
+  customize:
+    appender: console
+
+spring:
+  application:
+    name: boot-io
