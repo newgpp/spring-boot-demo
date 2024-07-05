@@ -41,7 +41,6 @@ public class LineReadWriteTest {
         try (FileOutputStream fileOutputStream = new FileOutputStream("out.text")) {
             //then
             IOUtils.writeLines(lines, null, fileOutputStream, StandardCharsets.UTF_8);
-            IOUtils.closeQuietly(fileOutputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -17,15 +17,15 @@ public class CsvReadWriteTest {
     @Test
     public void read_csv_all() {
         //given
-        InputStream inputStream = CsvReadWriteTest.class.getClassLoader().getResourceAsStream("sample_csv.csv");
         CSVFormat format = CSVFormat.DEFAULT.builder()
                 .setHeader("parkRecordId", "entryTime", "exitTime", "should", "money")
                 .setDelimiter(",")
                 .setSkipHeaderRecord(true)
                 .build();
-        try {
+        try (InputStream inputStream = CsvReadWriteTest.class.getClassLoader().getResourceAsStream("sample_csv.csv");
+             InputStreamReader reader = new InputStreamReader(inputStream)) {
             //when
-            CSVParser parser = new CSVParser(new InputStreamReader(inputStream), format);
+            CSVParser parser = new CSVParser(reader, format);
             //then
             List<CSVRecord> records = parser.getRecords();
             for (CSVRecord record : records) {
