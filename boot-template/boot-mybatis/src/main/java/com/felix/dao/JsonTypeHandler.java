@@ -17,7 +17,7 @@ import java.sql.SQLException;
 
 @MappedTypes(ObjectNode.class)
 @MappedJdbcTypes(value = JdbcType.LONGVARCHAR, includeNullJdbcType = true)
-public class JsonTypeHandler<T extends Object> extends BaseTypeHandler<T> {
+public class JsonTypeHandler<T> extends BaseTypeHandler<T> {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
