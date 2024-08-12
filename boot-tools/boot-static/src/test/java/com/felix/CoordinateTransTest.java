@@ -16,8 +16,8 @@ public class CoordinateTransTest {
     @Test
     public void test_t(){
         //given
-        double lon = 113.232975d;
-        double lat = 23.396378d;
+        double lon = 113.230074d;
+        double lat = 23.394560d;
         //when
         Double[] doubles = Coordtransform.WGS84ToGCJ02(lon, lat);
         //then
@@ -35,8 +35,17 @@ public class CoordinateTransTest {
         for (String line : lines) {
             String[] arr = line.split(",");
             String a = arr[0].replaceAll("左侧", "").replaceAll("\\.", "");
-            String b = arr[1].substring(0, 9);
-            String c = arr[2].substring(0, 10);
+            //经度
+            double lon = Double.parseDouble(arr[2].substring(0, 10));
+            //纬度
+            double lat = Double.parseDouble(arr[1].substring(0, 9));
+
+            Double[] doubles = Coordtransform.WGS84ToGCJ02(lon, lat);
+            //纬度
+            String b = String.valueOf(doubles[1]).substring(0, 9);
+            //经度
+            String c = String.valueOf(doubles[0]).substring(0, 10);
+
             coordinates.add(a + "," + b + "," + c);
         }
 
