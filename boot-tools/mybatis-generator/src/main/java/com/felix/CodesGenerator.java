@@ -9,7 +9,6 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -20,7 +19,7 @@ import java.util.Optional;
 /**
  * 使用java代码方式运行mybatis generator
  */
-public class Startup {
+public class CodesGenerator {
 
 
     public static void main(String[] args) throws IOException, XMLParserException, InvalidConfigurationException, SQLException, InterruptedException {
@@ -33,7 +32,7 @@ public class Startup {
         boolean overwriteFlag = Optional.ofNullable(overwrite).orElse("true").equals("true");
 
         List<String> warnings = new ArrayList<String>();
-        InputStream inputStream = Startup.class.getClassLoader().getResourceAsStream(configFilePath);
+        InputStream inputStream = CodesGenerator.class.getClassLoader().getResourceAsStream(configFilePath);
         ConfigurationParser cp = new ConfigurationParser(warnings);
         Configuration config = cp.parseConfiguration(inputStream);
         DefaultShellCallback callback = new DefaultShellCallback(overwriteFlag);
