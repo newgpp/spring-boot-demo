@@ -20,10 +20,10 @@ public class SelectSelectivePlugin extends org.mybatis.generator.api.PluginAdapt
     @Override
     public boolean clientGenerated(Interface interfaze, IntrospectedTable introspectedTable) {
         Method method = new Method("");
-        method.setName("selectSelective");
+        method.setName("selectList");
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + introspectedTable.getBaseRecordType() + ">"));
-        method.addParameter(new Parameter(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()), "record"));
+        method.addParameter(new Parameter(new FullyQualifiedJavaType("Map<String, Object>"), "params"));
         method.setAbstract(true);
         interfaze.addMethod(method);
         return true;
@@ -33,14 +33,14 @@ public class SelectSelectivePlugin extends org.mybatis.generator.api.PluginAdapt
     @Override
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
         XmlElement selectElement = new XmlElement("select");
-        selectElement.addAttribute(new Attribute("id", "selectSelective"));
+        selectElement.addAttribute(new Attribute("id", "selectList"));
         selectElement.addAttribute(new Attribute("resultMap", "BaseResultMap"));
-        selectElement.addAttribute(new Attribute("parameterType", introspectedTable.getBaseRecordType()));
+        selectElement.addAttribute(new Attribute("parameterType", "java.util.Map"));
 
         StringBuilder sql = new StringBuilder();
         sql.append("select <include refid=\"Base_Column_List\" /> from ");
         sql.append(introspectedTable.getFullyQualifiedTableNameAtRuntime());
-        sql.append(" where 1=1");
+        selectElement.addElement(new TextElement(sql.toString()));
 
         // 动态 WHERE 条件
         XmlElement whereClause = new XmlElement("where");
