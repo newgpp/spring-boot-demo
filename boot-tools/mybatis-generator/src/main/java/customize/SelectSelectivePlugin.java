@@ -7,6 +7,8 @@ import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
+import java.util.List;
+
 public class SelectSelectivePlugin extends org.mybatis.generator.api.PluginAdapter {
 
     @Override
@@ -22,6 +24,7 @@ public class SelectSelectivePlugin extends org.mybatis.generator.api.PluginAdapt
         method.setVisibility(JavaVisibility.PUBLIC);
         method.setReturnType(new FullyQualifiedJavaType("List<" + introspectedTable.getBaseRecordType() + ">"));
         method.addParameter(new Parameter(new FullyQualifiedJavaType(introspectedTable.getBaseRecordType()), "record"));
+        method.setAbstract(true);
         interfaze.addMethod(method);
         return true;
     }
